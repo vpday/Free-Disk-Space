@@ -2,51 +2,52 @@ name: CI
 on:
   workflow_dispatch:
 jobs:
-  - uses: actions/checkout@v6
-    with:
-      submodules: 'recursive'
+  build:
+    - uses: actions/checkout@v6
+      with:
+        submodules: 'recursive'
 
-  - name: Check Initial Disk Space
-    run: df -h
+    - name: Check Initial Disk Space
+      run: df -h
 
-  - name: Free Disk Space (Custom Script)
-    shell: bash
-    run: |
-      sudo rm -rf /usr/lib/jvm
-      sudo rm -rf /usr/lib/dotnet
-      sudo rm -rf /usr/share/swift
-      sudo rm -rf /usr/share/miniconda
-      sudo rm -rf /usr/local/graalvm
-      sudo rm -rf /usr/local/share/powershell
-      sudo rm -rf /usr/local/share/chromium
-      sudo rm -rf /usr/local/lib/node_modules
-      sudo rm -rf /opt/hostedtoolcache/CodeQL
+    - name: Free Disk Space (Custom Script)
+      shell: bash
+      run: |
+        sudo rm -rf /usr/lib/jvm
+        sudo rm -rf /usr/lib/dotnet
+        sudo rm -rf /usr/share/swift
+        sudo rm -rf /usr/share/miniconda
+        sudo rm -rf /usr/local/graalvm
+        sudo rm -rf /usr/local/share/powershell
+        sudo rm -rf /usr/local/share/chromium
+        sudo rm -rf /usr/local/lib/node_modules
+        sudo rm -rf /opt/hostedtoolcache/CodeQL
 
-  - name: Free Disk Space
-    uses: BRAINSia/free-disk-space@v2
-    with:
-      tool-cache: false
-      mandb: true
-      android: true
-      dotnet: true
-      haskell: true
-      large-packages: true
-      docker-images: true
-      swap-storage: false
+    - name: Free Disk Space
+      uses: BRAINSia/free-disk-space@v2
+      with:
+        tool-cache: false
+        mandb: true
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: false
 
-  - name: Generate ncdu Disk Usage Report
-    run: |
-      wget https://dev.yorhel.nl/download/ncdu-2.9.1-linux-x86.tar.gz
-      tar -xvf ncdu-2.9.1-linux-x86.tar.gz
-      chmod +x ncdu
-      echo "Starting disk scan..."
-      sudo ./ncdu -0 -x --exclude-kernfs -t 4 -o disk-usage.json /
-      echo "Scan complete. Report saved to disk-usage.json"
-      ls -lh disk-usage.json
+    - name: Generate ncdu Disk Usage Report
+      run: |
+        wget https://dev.yorhel.nl/download/ncdu-2.9.1-linux-x86.tar.gz
+        tar -xvf ncdu-2.9.1-linux-x86.tar.gz
+        chmod +x ncdu
+        echo "Starting disk scan..."
+        sudo ./ncdu -0 -x --exclude-kernfs -t 4 -o disk-usage.json /
+        echo "Scan complete. Report saved to disk-usage.json"
+        ls -lh disk-usage.json
 
-  - name: Upload Disk Usage Report
-    uses: actions/upload-artifact@v4
-    with:
-      name: ncdu-report
-      path: disk-usage.json
-      retention-days: 5
+    - name: Upload Disk Usage Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: ncdu-report
+        path: disk-usage.json
+        retention-days: 5
