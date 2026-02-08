@@ -46,8 +46,8 @@ jobs:
           ls -lh disk-usage.json
 
       - name: Upload Disk Usage Report
-      uses: actions/upload-artifact@v6
-      with:
-        name: ncdu-report
-        path: disk-usage.json
-        retention-days: 5
+        uses: actions/upload-artifact@v6
+        with:
+          name: ncdu-report
+          path: disk-usage.json
+          retention-days: 5
