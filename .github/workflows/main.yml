@@ -60,11 +60,16 @@ jobs:
           echo "Scan complete."
           ls -lh disk-usage-after.json.zst
 
+      - name: Compress Reports
+        run: |
+          echo "Packaging reports..."
+          /usr/bin/tar -I "zstd -19 -T0" -cvf ncdu-report.tar.zst disk-usage-before.json.zst disk-usage-after.json.zst
+          echo "Package created:"
+          ls -lh ncdu-report.tar.zst
+
       - name: Upload Disk Usage Report
         uses: actions/upload-artifact@v6
         with:
           name: ncdu-report
           retention-days: 5
-          path: |
-            disk-usage-before.json.zst
-            disk-usage-after.json.zst
+          path: ncdu-report.tar.zst
