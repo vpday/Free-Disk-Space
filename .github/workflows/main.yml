@@ -62,6 +62,8 @@ jobs:
 
       - name: Compress Reports
         run: |
+          echo "ZSTD version:"
+          zstd --version
           echo "Packaging reports..."
           /usr/bin/tar -I "zstd -19 -T0" -cvf ncdu-report.tar.zst disk-usage-before.json.zst disk-usage-after.json.zst
           echo "Package created:"
